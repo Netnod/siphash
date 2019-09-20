@@ -38,7 +38,7 @@
 
 module siphash(
                input wire           clk,
-               input wire           reset_n,
+               input wire           areset,
                input wire           cs,
                input wire           we,
                input wire [7 : 0]   addr,
@@ -168,7 +168,7 @@ module siphash(
   //----------------------------------------------------------------
   siphash_core core(
                     .clk(clk),
-                    .reset_n(reset_n),
+                    .areset(areset),
 
                     .initalize(core_initalize),
                     .compress(core_compress),
@@ -192,9 +192,9 @@ module siphash(
   // All registers are positive edge triggered with
   // asynchronous active low reset.
   //----------------------------------------------------------------
-  always @ (posedge clk)
+  always @ (posedge clk or posedge areset)
     begin
-      if (!reset_n)
+      if (areset)
         begin
           // Reset all registers to defined values.
           ctrl_reg  <= 3'h0;

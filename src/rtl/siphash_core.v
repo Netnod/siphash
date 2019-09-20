@@ -44,7 +44,7 @@
 module siphash_core(
                     // Clock and reset.
                     input wire            clk,
-                    input wire            reset_n,
+                    input wire            areset,
 
                     input wire            initalize,
                     input wire            compress,
@@ -150,9 +150,9 @@ module siphash_core(
   // All registers are positive edge triggered with
   // asynchronous active low reset.
   //----------------------------------------------------------------
-  always @ (posedge clk)
+  always @ (posedge clk or posedge areset)
     begin
-      if (!reset_n)
+      if (areset)
         begin
           // Reset all registers to defined values.
           v0_reg            <= 64'h0;

@@ -54,7 +54,7 @@ module tb_siphash_core();
   reg [31 : 0] error_ctr;
 
   reg            tb_clk;
-  reg            tb_reset_n;
+  reg            tb_areset;
   reg            tb_initalize;
   reg            tb_compress;
   reg            tb_finalize;
@@ -75,7 +75,7 @@ module tb_siphash_core();
   //----------------------------------------------------------------
   siphash_core dut(
                    .clk(tb_clk),
-                   .reset_n(tb_reset_n),
+                   .areset(tb_areset),
 
                    .initalize(tb_initalize),
                    .compress(tb_compress),
@@ -149,8 +149,8 @@ module tb_siphash_core();
       $display("Inputs:");
       $display("init = %b, compress = %b, finalize = %b",
                tb_initalize, tb_compress, tb_finalize);
-      $display("reset = %b, c = %02x, d = %02x, mi = %08x",
-               tb_reset_n, tb_c, tb_d, tb_mi);
+      $display("areset = %b, c = %02x, d = %02x, mi = %08x",
+               tb_areset, tb_c, tb_d, tb_mi);
       $display("");
       #(CLK_PERIOD);
     end
@@ -215,7 +215,7 @@ module tb_siphash_core();
       tb_long      = 0;
       cycle_ctr    = 0;
       tb_clk       = 0;
-      tb_reset_n   = 0;
+      tb_areset    = 1;
     end
   endtask // tb_init
 
@@ -384,7 +384,7 @@ module tb_siphash_core();
 
       #(10 * CLK_PERIOD);
       @(negedge tb_clk)
-      tb_reset_n = 1;
+      tb_areset = 0;
       dump_state();
 
       #(2 * CLK_PERIOD);

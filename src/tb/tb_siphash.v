@@ -95,7 +95,7 @@ module tb_siphash();
   reg [31 : 0] error_ctr;
 
   reg tb_clk;
-  reg tb_reset_n;
+  reg tb_areset;
 
   reg           tb_cs;
   reg           tb_we;
@@ -111,7 +111,7 @@ module tb_siphash();
   //----------------------------------------------------------------
   siphash dut(
               .clk(tb_clk),
-              .reset_n(tb_reset_n),
+              .areset(tb_areset),
               .cs(tb_cs),
               .we(tb_we),
               .addr(tb_addr),
@@ -223,7 +223,7 @@ module tb_siphash();
       error_ctr     = 0;
       cycle_ctr     = 0;
       tb_clk        = 0;
-      tb_reset_n    = 1;
+      tb_areset     = 0;
       tb_cs         = 1'b0;
       tb_we         = 1'b0;
       tb_addr       = 8'h00;
@@ -241,10 +241,10 @@ module tb_siphash();
       $display("Toggling reset.");
       dump_state();
       #(2 * CLK_PERIOD);
-      tb_reset_n = 0;
+      tb_areset = 1;
       #(10 * CLK_PERIOD);
       @(negedge tb_clk)
-      tb_reset_n = 1;
+      tb_areset = 0;
       dump_state();
       $display("Toggling of reset done.");
     end
